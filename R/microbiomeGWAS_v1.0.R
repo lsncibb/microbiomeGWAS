@@ -287,23 +287,33 @@ funMain <- function(pLinkFile, distMat, dataCovariate = NULL, interactiveCovaria
 	nSNP <- nrow(dataBim)
 
 	if(nrow(distMat) != nSample)stop("The number of samples must be the same in the distance matrix and the pLink file!")
-	if(nrow(dataCovariate) != nSample)stop("The number of samples must be the same in the covariate file and the pLink file!")
+	if(!is.null(dataCovariate) & nrow(dataCovariate) != nSample)stop("The number of samples must be the same in the covariate file and the pLink file!")
 
 	})
 	cat(paste0("Done (", tempTime[3], "s)\nStep 2: Calculating the residuals of the distance matrix via linear regression...")
+
+	if(is.null(dataCovariate)){
+		distMatRes <- distMat - mean(distMat[lower.tri(distMat)], na.rm = TRUE)
+		diag(distMatRes) <- 0
+		cat("Skipped\n")
+	}else{
+
 	tempTime <- system.time({
 
-	tempList <- lapply(dataCovariate, function(x)outer(x, x, function(a, b)abs(a - b)))
-	tempList <- lapply(tempList, function(x)x[lower.tri(x)])
-	dataModel <- data.frame(y = distMat[lower.tri(distMat)], tempList)
-	tempFormula <- as.formula(paste0("y ~ 1 + ", paste(names(dataCovariate), collapse = " + ")))
-	tempModel <- lm(tempFormula, data = dataModel)
-	distMatRes <- distMat; distMatRes[, ] <- 0
-	distMatRes[lower.tri(distMatRes)] <- tempModel$residuals
-	distMatRes <- distMatRes + t(distMatRes)
+		tempList <- lapply(dataCovariate, function(x)outer(x, x, function(a, b)abs(a - b)))
+		tempList <- lapply(tempList, function(x)x[lower.tri(x)])
+		dataModel <- data.frame(y = distMat[lower.tri(distMat)], tempList)
+		tempFormula <- as.formula(paste0("y ~ 1 + ", paste(colnames(dataCovariate), collapse = " + ")))
+		tempModel <- lm(tempFormula, data = dataModel)
+		distMatRes <- distMat; distMatRes[, ] <- 0
+		distMatRes[lower.tri(distMatRes)] <- tempModel$residuals
+		distMatRes <- distMatRes + t(distMatRes)
 
 	})
-	cat(paste0("Done (", tempTime[3], "s)\nStep 3: Calculating the expectation of Dij terms in the formula, running", nPerm, "permutations...")
+		cat(paste0("Done (", tempTime[3], "s)\n")
+	}
+
+	cat(paste0("Step 3: Calculating the expectation of Dij terms in the formula, running ", nPerm, " permutations...")
 	tempTime <- system.time({
 
 	eD <- funED_C(distMat, nPerm = nPerm, nPermEach = nPermEach, soFile1 = soFile1, soFile2 = soFile2)
@@ -438,3 +448,29 @@ funMain <- function(pLinkFile, distMat, dataCovariate = NULL, interactiveCovaria
 
 ###########################################################################
 
+#Main procedure
+
+args <- commandArgs(trailingOnly = TRUE)
+pLinkFile <- args[1]
+distMatFile <- args[2]
+workDir <- <- args[3]
+covariateFile <- args[4]
+interactiveCovariateName <- args[5]
+
+if(is.na(pLinkFile) | is.na(distMatFile))stop("The plink file and the distance matrix file must be specified!")
+distMat <- as.matrix(read.table(distMatFile))
+
+if(is.na(workDir))workDir <- ""
+soFile1 <- paste0(workDir, "/lib/"dExp1.so")
+soFile2 <- paste0(workDir, "/lib/"dExp2.so")
+soFile3 <- paste0(workDir, "/lib/"parsePlink.so")
+soFile4 <- paste0(workDir, "/lib/"parsePlink2.so")
+
+if(is.na(covariateFile))dataCovariate <- NULL else dataCovariate <- read.table(covariateFile, header = TRUE)
+if(any(!unlist(lapply(dataCovariate, is.numeric))))stop("Only numeric covariates allowed!")
+if(is.na(interactiveCovariateName))interactiveCovariateName <- NULL
+
+tempTime <- system.time(resultDF <- funMain(pLinkFile, distMat, dataCovariate, interactiveCovariateName))
+cat("paste0("All done (total ", tempTime[3], "s)\nWriting the output file...")
+write.table(resultDF, file = paste0(pLinkFile, ".result.txt"), sep = "\t", quote = FALSE, row.names = FALSE)
+cat("Done\n")
