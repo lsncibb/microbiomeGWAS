@@ -1,6 +1,6 @@
 # MicrobiomeGWAS
 
-MicrobiomeGWAS is a software package for identifying host genetic variants associated with micorbiome distance matrix or beta-diversity. For each SNP, microbiome GWAS tests the main effect or the SNP-environment interaction. 
+MicrobiomeGWAS is a software package for identifying host genetic variants associated with micorbiome distance matrix or beta-diversity. For each SNP, microbiome GWAS tests the main effect or the SNP-environment interaction using score statistics. 
 
 The score statistics have positive skewness and kurtosis, which lead to severely inflated type-I error rates. We solved the problem by correcting the skewness and kurtosis, verified by simulations.    
 
