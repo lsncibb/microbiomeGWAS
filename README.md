@@ -1,7 +1,12 @@
-# microbiomeGWAS
+# MicrobiomeGWAS
 ## Introduction
-MicrobiomeGWAS: a tool for identifying host genetic variants associated with microbiome composition
-The microbiome is the collection of all microbial genes and can be investigated by sequencing highly variable regions of 16S ribosomal RNA (rRNA) genes. Evidence suggests that environmental factors and host genetics may interact to impact human microbiome composition. Identifying host genetic variants associated with  human microbiome composition not only provides clues for characterizing microbiome variability but also helps to elucidate biological mechanisms of genetic associations, prioritize genetic variants, and improve genetic risk prediction. Since a microbiota functions as a community, it is best characterized by beta diversity, that is, a pairwise distance matrix. We develop a statistical framework and a computationally efficient software package, microbiomeGWAS, for identifying host genetic variants associated with microbiome beta diversity with or without interacting with an environmental factor. We show that the score statistics have positive skewness and kurtosis due to the dependent nature of the pairwise data, which makes P-value approximations based on asymptotic distributions unacceptably liberal. We develop accurate P-value approximations by correcting for skewness and kurtosis, whose accuracy was verified by extensive simulations. 
+Microbiome is a software package for identifying host genetic variants associated with micorbiome distance matrix or beta-diversity. For each SNP, Microbiome GWAS can test the main effect or the SNP-environment interaction. We found that the score statistics have positive skewness and kurtosis, which lead to severely inflated type_I error rates. We addressed the problem by correcting the skewness and kurtosis to derive an approximation. Simulations suggested that the P-value approxcimations are accurate even for P=10E-7.   
+
+The current version requires three sets of files: PLINK binary genotype files, a distance matrix and a set of covariates, e.g., PCAs for adjusting population stratefication. The current version does not support genotypic dosages. 
+
+Microbiome is very fast, 
+
+
 ## Example
 ## Figure
 [![Display Figure](https://github.com/lsncibb/microbiomeGWAS/figure.png)](https://github.com/lsncibb/microbiomeGWAS/id123456)
