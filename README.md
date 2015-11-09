@@ -11,7 +11,7 @@ PLINK binary genotype files, a distance matrix and a set of covariates, e.g., PC
 The current version does not support genotypic dosages. 
 
 ## Memory require and computation speed
-MicrobiomeGWAS processes one SNP at a time and does not load all genotype data into memory; thus, it requires only memory for storing the distance matrix. 
+MicrobiomeGWAS processes one SNP at a time and does not load all genotype data into memory; thus, it requires only memory for storing the distance matrix. The computation time is summarized in the figure. 
 
 ## Figure
 [![Display Figure](https://github.com/lsncibb/microbiomeGWAS/figure.png)](https://github.com/lsncibb/microbiomeGWAS/id123456)
