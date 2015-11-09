@@ -15,7 +15,7 @@ The current version does not support genotypic dosages.
 MicrobiomeGWAS processes one SNP at a time and does not load all genotype data into memory; thus, it requires only memory for storing the distance matrix. The computation time is summarized in the figure for analyzing a GWAS with 500,000 SNPs. "Main": main effect test only. "All": main effect test, interaction test and joint effect test. 
 
 
-[![Display Figure](https://cloud.githubusercontent.com/assets/15255156/11045798/ad356228-86f7-11e5-9072-5ca41323bb71.png)](https://github.com/lsncibb/microbiomeGWAS/id123456)
+[![Display Figure](https://cloud.githubusercontent.com/assets/15255156/11046333/d8560a36-86fa-11e5-8105-6f644ee5c6d7.png)](https://github.com/lsncibb/microbiomeGWAS/id123456)
 
 ## Reference
 Xing Hua, Lei Song, Guoqin Yu, James J. Goedert, Christian C. Abnet, Maria Teresa Landi and Jianxin Shi. MicrobiomeGWAS: a tool for identifying host genetic variants associated with microbiome composition. 
