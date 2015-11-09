@@ -12,4 +12,7 @@ Microbiome is very fast,
 [![Display Figure](https://github.com/lsncibb/microbiomeGWAS/figure.png)](https://github.com/lsncibb/microbiomeGWAS/id123456)
 ## Contact
 * email:
-* http://
+* Xing Hua, xing.hua@nih.gov
+* Lei Song, lei.song@nih.gov
+* Jianxin Shi, Jianxin.Shi@nih.gov
+
