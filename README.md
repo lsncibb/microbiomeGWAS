@@ -8,7 +8,9 @@ Xing Hua, Lei Song, Guoqin Yu, James J. Goedert, Christian C. Abnet, Maria Teres
 
 ## Input files
 PLINK binary genotype files. The current version does not support genotypic dosages. 
+
 A distance matrix 
+
 A set of covariates, e.g., PCAs for adjusting population stratefication
 
 ## Memory require and computation speed
