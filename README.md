@@ -16,7 +16,7 @@ The current version does not support genotypic dosages.
 MicrobiomeGWAS processes one SNP at a time and does not load all genotype data into memory; thus, it requires only memory for storing the distance matrix. The computation time is summarized in the figure. 
 
 ## Figure
-[![Display Figure](https://github.com/lsncibb/microbiomeGWAS/figure.png)](https://github.com/lsncibb/microbiomeGWAS/id123456)
+[![Display Figure](https://cloud.githubusercontent.com/assets/15255156/11045798/ad356228-86f7-11e5-9072-5ca41323bb71.png)](https://github.com/lsncibb/microbiomeGWAS/id123456)
 
 
 ## Example
