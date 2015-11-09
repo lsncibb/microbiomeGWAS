@@ -1,6 +1,8 @@
 # MicrobiomeGWAS
 ## Introduction
-Microbiome is a software package for identifying host genetic variants associated with micorbiome distance matrix or beta-diversity. For each SNP, Microbiome GWAS can test the main effect or the SNP-environment interaction. We found that the score statistics have positive skewness and kurtosis, which lead to severely inflated type_I error rates. We addressed the problem by correcting the skewness and kurtosis to derive an approximation. Simulations suggested that the P-value approxcimations are accurate even for P=10E-7.   
+Microbiome is a software package for identifying host genetic variants associated with micorbiome distance matrix or beta-diversity. For each SNP, Microbiome GWAS can test the main effect or the SNP-environment interaction. 
+
+The score statistics have positive skewness and kurtosis, which lead to severely inflated type-I error rates. We solved the problem by correcting the skewness and kurtosis, verified by simulations.    
 
 
 ## Reference
