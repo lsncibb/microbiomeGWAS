@@ -7,11 +7,8 @@ Microbiome is a software package for identifying host genetic variants associate
 Xing Hua, Lei Song, Guoqin Yu, James J. Goedert, Christian C. Abnet, Maria Teresa Landi and Jianxin Shi. MicrobiomeGWAS: a tool for identifying host genetic variants associated with microbiome composition. 
 
 ## Input files
-PLINK binary genotype files. The current version does not support genotypic dosages. 
-
-A distance matrix 
-
-A set of covariates, e.g., PCAs for adjusting population stratefication
+PLINK binary genotype files, a distance matrix and a set of covariates, e.g., PCAs for adjusting population stratefication. 
+The current version does not support genotypic dosages. 
 
 ## Memory require and computation speed
 MicrobiomeGWAS processes one SNP at a time and does not load all genotype data into memory; thus, it requires only memory for storing the distance matrix. 
