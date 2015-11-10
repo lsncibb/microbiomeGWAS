@@ -18,7 +18,7 @@ MicrobiomeGWAS processes one SNP at a time and does not load all genotype data i
 [![Display Figure](https://cloud.githubusercontent.com/assets/15255156/11046333/d8560a36-86fa-11e5-8105-6f644ee5c6d7.png)](https://github.com/lsncibb/microbiomeGWAS/)
 
 ## Future extensions
-We are extending microbiomeGWAS for testing additive and dominant effects. We are also extending the algorithm to test multiple microbiome beta diversity matrices, e.g., generalized UniFrac. 
+We are extending microbiomeGWAS for testing additive and dominant effects. We are also extending the algorithm to test multiple microbiome beta diversity matrices, e.g., generalized UniFrac, to achieve the optimal statistical power. 
 
 ## Reference
 Xing Hua, Lei Song, Guoqin Yu, James J. Goedert, Christian C. Abnet, Maria Teresa Landi and Jianxin Shi. MicrobiomeGWAS: a tool for identifying host genetic variants associated with microbiome composition. 
