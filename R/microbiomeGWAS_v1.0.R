@@ -105,6 +105,7 @@ funEG <- function(f){
 	eGijGikGlm2 = eGijGik * eGij2, 
 	eGijGikGlmGln = eGijGik^2)
 	eG <- eG[tempIdx, ]
+	if(nrow(eG) == 1)eG <- eG[1, ]
 	return(eG)
 }
 
@@ -290,7 +291,7 @@ funMain <- function(pLinkFile, distMat, dataCovariate = NULL, interactiveCovaria
 	if(!is.null(dataCovariate) & nrow(dataCovariate) != nSample)stop("The number of samples must be the same in the covariate file and the pLink file!")
 
 	})
-	cat(paste0("Done (", tempTime[3], "s)\nStep 2: Calculating the residuals of the distance matrix via linear regression...")
+	cat(paste0("Done (", tempTime[3], "s)\nStep 2: Calculating the residuals of the distance matrix via linear regression..."))
 
 	if(is.null(dataCovariate)){
 		distMatRes <- distMat - mean(distMat[lower.tri(distMat)], na.rm = TRUE)
@@ -310,16 +311,16 @@ funMain <- function(pLinkFile, distMat, dataCovariate = NULL, interactiveCovaria
 		distMatRes <- distMatRes + t(distMatRes)
 
 	})
-		cat(paste0("Done (", tempTime[3], "s)\n")
+		cat(paste0("Done (", signif(tempTime[3], 3), "s)\n"))
 	}
 
-	cat(paste0("Step 3: Calculating the expectation of Dij terms in the formula, running ", nPerm, " permutations...")
+	cat(paste0("Step 3: Calculating the expectation of Dij terms in the formula, running ", nPerm, " permutations..."))
 	tempTime <- system.time({
 
-	eD <- funED_C(distMat, nPerm = nPerm, nPermEach = nPermEach, soFile1 = soFile1, soFile2 = soFile2)
+	eD <- funED(distMat, nPerm = nPerm, nPermEach = nPermEach, soFile1 = soFile1, soFile2 = soFile2)
 
 	})
-	cat(paste0("Done (", tempTime[3], "s)\nStep 4: Calculating the score test statistic for all SNPs...")
+	cat(paste0("Done (", tempTime[3], "s)\nStep 4: Calculating the score test statistic for all SNPs..."))
 	tempTime <- system.time({
 
 	if(is.null(interactiveCovariateName)){
@@ -349,7 +350,7 @@ funMain <- function(pLinkFile, distMat, dataCovariate = NULL, interactiveCovaria
 	names(tempDF) <- c("RR", "RV", "VV", "MISSING", "MAF", "RR_I", "RV_I", "VV_I", "MISSING_I", "MAF_I", "SM", "SI")
 	})
 
-	cat(paste0("Done (", tempTime[3], "s)\nStep 5: Calculating the Z score, along with the skewness, kurtosis and p values...")
+	cat(paste0("Done (", tempTime[3], "s)\nStep 5: Calculating the Z score, along with the skewness, kurtosis and p values..."))
 	tempTime <- system.time({
 
 	N <- nSample - tempDF$MISSING
@@ -357,8 +358,9 @@ funMain <- function(pLinkFile, distMat, dataCovariate = NULL, interactiveCovaria
 	eG <- funEG(f)
 #	eG <- funEG(cbind(tempDF$RR / N, tempDF$RV / N))
 	estimate <- funEstimate(N, eD, eG)
-	skewSM <- estimate$skewSM
-	kurtSM <- estimate$kurtSM
+	varSM <- estimate[, "varSM"]
+	skewSM <- estimate[, "skewSM"]
+	kurtSM <- estimate[, "kurtSM"]
 	SM <- tempDF$SM
 	ZM <- SM / sqrt(varSM)
 	pM <- pMS <- pMK <- pnorm(ZM, lower.tail = FALSE)
@@ -375,8 +377,9 @@ funMain <- function(pLinkFile, distMat, dataCovariate = NULL, interactiveCovaria
 		eT <- funEG(cbind(colSums(pArray[, 1, ]) + pArray[1, 2, ], pArray[2, 2, ]))
 #		eT <- funEG(cbind(tempDF$RR_I / N, tempDF$RV_I / N))
 		estimate <- funEstimate(N, eD, eT)
-		skewSI <- estimate$skewSM
-		kurtSI <- estimate$kurtSM
+		varSI <- estimate[, "varSM"]
+		skewSI <- estimate[, "skewSM"]
+		kurtSI <- estimate[, "kurtSM"]
 		SI <- tempDF$SI
 		ZI <- SI / sqrt(varSI)
 		pI <- pIS <- pIK <- pnorm(ZI, lower.tail = FALSE)
@@ -393,8 +396,10 @@ funMain <- function(pLinkFile, distMat, dataCovariate = NULL, interactiveCovaria
 			eGijTij <- eGT["eGijTij"]
 			eGijTik <- eGT["eGijTik"]
 		}else stop("Something wrong!")
-		covSMSI1 <- N * (N - 1) / 2 * (eGijTij - eGij * eTij) * eDij2
-		covSMSI2 <- N * (N - 1) * (N - 2) * (eGijTik - eGij * eTij) * eDijDik
+		if(is.matrix(eG)){eGij <- eG[, "eGij"]}else if(is.vector(eG)){eGij <- eG["eGij"]}else stop("Something wrong!")
+		if(is.matrix(eT)){eTij <- eT[, "eGij"]}else if(is.vector(eT)){eTij <- eT["eGij"]}else stop("Something wrong!")
+		covSMSI1 <- N * (N - 1) / 2 * (eGijTij - eGij * eTij) * eD["eDij2"]
+		covSMSI2 <- N * (N - 1) * (N - 2) * (eGijTik - eGij * eTij) * eD["eDijDik"]
 		covSMSI <- covSMSI1 + covSMSI2
 		corSMSI <- covSMSI / sqrt(varSM * varSI)
 
@@ -441,36 +446,101 @@ funMain <- function(pLinkFile, distMat, dataCovariate = NULL, interactiveCovaria
 	}else resultDF <- data.frame(SNP = dataBim$V2, Chr = dataBim$V1, Pos = dataBim$V4, Allele1 = dataBim$V5, Allele2 = dataBim$V6, MAF = f, Z_M = ZM, Skew_M = skewSM, Kurt_M = kurtSM, p_M_Asymptotic = pM, p_M_Skew = pMS, p_M_skew_kurt = pMK, stringsAsFactors = FALSE, check.names = FALSE)
 
 	})
-	cat("paste0("Done (", tempTime[3], "s)\n")
+	cat(paste0("Done (", tempTime[3], "s)\n"))
 
 	return(resultDF)
 }
 
 ###########################################################################
-
 #Main procedure
 
-args <- commandArgs(trailingOnly = TRUE)
-pLinkFile <- args[1]
-distMatFile <- args[2]
-workDir <- <- args[3]
-covariateFile <- args[4]
-interactiveCovariateName <- args[5]
+## Collect arguments
+args <- commandArgs(TRUE)
 
-if(is.na(pLinkFile) | is.na(distMatFile))stop("The plink file and the distance matrix file must be specified!")
+## Default setting when no arguments passed
+if(length(args) < 1) {
+  args <- c("-h")
+}
+
+## Help section
+if("-h" %in% args) {
+	cat("
+	The microbiomeGWAS Script
+
+	Arguments:
+		-r	absolute path to the microbiomeGWAS package root, required
+		-p	plink file pre with absolutte path, required
+		-d	distance matrix file pre with absolutte path, required
+		-o	absolute path for output results, optional, defalut is the current directory
+		-c	covariateFile file pre with absolutte path, optional
+		-i	interactive	covariate name in covariateFile, optional, 
+
+	Example:
+	./microbiomeGWAS_v1.0.R -r ~/Downloads/microbiomeGWAS -p ~/Downloads/microbiomeGWAS/data/YOUR_PLINK_Pre -d ~/Downloads/microbiomeGWAS/data/YOUR_DIST_Matrix.txt -o ~/Downloads -c ~/Downloads/microbiomeGWAS/data/YOUR_Data_Covariate.txt -i YOUR_Covariate_Name \n\n")
+
+	q(save="no")
+}
+
+idx = 1
+argsDF = NULL
+while(idx < length(args)){
+	argsDF = rbind(argsDF, c(gsub('-', '', args[idx]), args[idx + 1]))
+	idx = idx + 2
+}
+argsL = as.list(as.character(argsDF[, 2]))
+names(argsL) <- argsDF[, 1]
+
+
+if(is.null(argsL$r) | is.null(argsL$p) | is.null(argsL$d)) {
+	stop("microbiomeGWAS package root, plink file pre and distance matrix file are required!")
+}
+
+packageDir <- argsL$r
+cat('packageDir:', packageDir, '\n')
+pLinkFile <- argsL$p
+cat('pLinkFile:', pLinkFile, '\n')
+distMatFile <- argsL$d
+cat('distMatFile:', distMatFile, '\n')
+
+if(!is.null(argsL$c)){
+	covariateFile <- argsL$c
+	cat('covariateFile:', covariateFile, '\n')
+}else{
+	covariateFile = NA
+}
+
+if(!is.null(argsL$i)){
+	interactiveCovariateName <- argsL$i
+	cat('interactiveCovariateName:', interactiveCovariateName, '\n')
+}else{
+	interactiveCovariateName = NA
+}
+
+if(is.null(argsL$o)){
+	outDir = getwd()
+}else{
+	outDir = argsL$o
+}
+
+cat('outDir:', outDir, '\n')
+
+## Collect arguments done !
+
 distMat <- as.matrix(read.table(distMatFile))
 
-if(is.na(workDir))workDir <- ""
-soFile1 <- paste0(workDir, "/lib/"dExp1.so")
-soFile2 <- paste0(workDir, "/lib/"dExp2.so")
-soFile3 <- paste0(workDir, "/lib/"parsePlink.so")
-soFile4 <- paste0(workDir, "/lib/"parsePlink2.so")
+system(paste0('cd ', packageDir, '; ./compile.src.sh'))
+soFile1 <- paste0(packageDir, "/lib/dExp1.so")
+soFile2 <- paste0(packageDir, "/lib/dExp2.so")
+soFile3 <- paste0(packageDir, "/lib/parsePlink.so")
+soFile4 <- paste0(packageDir, "/lib/parsePlink2.so")
 
 if(is.na(covariateFile))dataCovariate <- NULL else dataCovariate <- read.table(covariateFile, header = TRUE)
 if(any(!unlist(lapply(dataCovariate, is.numeric))))stop("Only numeric covariates allowed!")
 if(is.na(interactiveCovariateName))interactiveCovariateName <- NULL
 
-tempTime <- system.time(resultDF <- funMain(pLinkFile, distMat, dataCovariate, interactiveCovariateName))
-cat("paste0("All done (total ", tempTime[3], "s)\nWriting the output file...")
-write.table(resultDF, file = paste0(pLinkFile, ".result.txt"), sep = "\t", quote = FALSE, row.names = FALSE)
+cat("Starting:\n")
+tempTime <- system.time(resultDF <- funMain(pLinkFile, distMat, dataCovariate, interactiveCovariateName, soFile1 = soFile1, soFile2 = soFile2, soFile3 = soFile3, soFile4 = soFile4))
+cat(paste0("All done (total ", tempTime[3], "s)\nWriting the output file..."))
+setwd(outDir)
+write.table(resultDF, file = paste0(tail(strsplit(pLinkFile, '/', fixed = TRUE)[[1]], 1), ".result.txt"), sep = "\t", quote = FALSE, row.names = FALSE)
 cat("Done\n")

@@ -8,7 +8,8 @@ void dExp1 (int *Dim, double *Xv, int *len, double *result)
 {
 	int N = *Dim;
 	// int n = *len;
-	int i, j, k, l;
+	// int i, j, k, l;
+	int i, j, k;
 	double tmp;
 	double tmpij, tmpjk, tmpik;
 
