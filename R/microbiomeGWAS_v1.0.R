@@ -532,7 +532,7 @@ soFile1 <- paste0(packageDir, "/lib/dExp1.so")
 soFile2 <- paste0(packageDir, "/lib/dExp2.so")
 soFile3 <- paste0(packageDir, "/lib/parsePlink.so")
 soFile4 <- paste0(packageDir, "/lib/parsePlink2.so")
-if(file.exists(soFile1) & file.exists(soFile2) & file.exists(soFile3) & file.exists(soFile4)){
+if((!file.exists(soFile1)) | (!file.exists(soFile2)) ! (!file.exists(soFile3)) & (!file.exists(soFile4))){
 	system(paste0('cd ', packageDir, '; ./compile.src.sh'))
 }
 
