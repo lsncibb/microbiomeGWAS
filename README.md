@@ -12,7 +12,7 @@ PLINK binary genotype files, a distance matrix and a set of covariates, e.g., PC
 The current version does not support dosage data from imputation programs.
 
 Example:
-	Rscript microbiomeGWAS_ROOT_PATH/R/microbiomeGWAS_v1.0.R -r microbiomeGWAS_ROOT_PATH -p YOUR_PLINK_PATH/PLINK_Pre -d YOUR_DIST_Matrix_PATH/DIST_Matrix.txt -o Out_PATH -c YOUR_Covariate_PATH/Covariate.txt -i YOUR_Covariate_Name
+	Rscript	  microbiomeGWAS_ROOT_PATH/R/microbiomeGWAS_v1.0.R -r microbiomeGWAS_ROOT_PATH -p YOUR_PLINK_PATH/PLINK_Pre -d YOUR_DIST_Matrix_PATH/DIST_Matrix.txt -o Out_PATH -c YOUR_Covariate_PATH/Covariate.txt -i YOUR_Covariate_Name
 
 ## Memory requirement and computation speed
 MicrobiomeGWAS processes one SNP at a time and does not load all genotype data into memory; thus, it requires only memory for storing the distance matrix. The computation time is summarized in the figure for analyzing a GWAS with 500,000 SNPs. "Main": main effect test only. "All": main effect test, interaction test and joint effect test. 
