@@ -7,5 +7,5 @@ R CMD SHLIB parsePlink.c
 R CMD SHLIB parsePlink2.c
 
 rm *.o
-
+mkdir ../lib
 mv *.so ../lib
