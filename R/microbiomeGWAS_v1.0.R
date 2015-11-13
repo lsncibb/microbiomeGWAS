@@ -528,11 +528,13 @@ cat('outDir:', outDir, '\n')
 
 distMat <- as.matrix(read.table(distMatFile))
 
-system(paste0('cd ', packageDir, '; ./compile.src.sh'))
 soFile1 <- paste0(packageDir, "/lib/dExp1.so")
 soFile2 <- paste0(packageDir, "/lib/dExp2.so")
 soFile3 <- paste0(packageDir, "/lib/parsePlink.so")
 soFile4 <- paste0(packageDir, "/lib/parsePlink2.so")
+if(file.exists(soFile1) & file.exists(soFile2) & file.exists(soFile3) & file.exists(soFile4)){
+	system(paste0('cd ', packageDir, '; ./compile.src.sh'))
+}
 
 if(is.na(covariateFile))dataCovariate <- NULL else dataCovariate <- read.table(covariateFile, header = TRUE)
 if(any(!unlist(lapply(dataCovariate, is.numeric))))stop("Only numeric covariates allowed!")
