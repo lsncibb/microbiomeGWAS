@@ -474,9 +474,8 @@ if("-h" %in% args) {
 		-o	absolute path for output results, optional, defalut is the current directory
 		-c	covariateFile file pre with absolutte path, optional
 		-i	interactive	covariate name in covariateFile, optional, 
-
-	Example:
-	./microbiomeGWAS_v1.0.R -r ~/Downloads/microbiomeGWAS -p ~/Downloads/microbiomeGWAS/data/YOUR_PLINK_Pre -d ~/Downloads/microbiomeGWAS/data/YOUR_DIST_Matrix.txt -o ~/Downloads -c ~/Downloads/microbiomeGWAS/data/YOUR_Data_Covariate.txt -i YOUR_Covariate_Name \n\n")
+	Usage:
+	Rscript microbiomeGWAS_Root_Path/R/microbiomeGWAS_v1.0.R -r microbiomeGWAS_Root_Path -p Your_Plink_Path/Plink_Pre -d Your_Dist_Matrix_Path/Dist_Matrix.txt -o Out_Path -c Your_Covariate_Path/Covariate.txt -i Your_Covariate_Name \n\n")
 
 	q(save="no")
 }
