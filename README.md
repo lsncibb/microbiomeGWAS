@@ -34,9 +34,9 @@ The current version does not support dosage data from imputation programs.
   Rscript microbiomeGWAS_Root_Path/R/microbiomeGWAS_v1.0.R -r microbiomeGWAS_Root_Path -p Your_Plink_Path/Plink_Pre -d Your_Dist_Matrix_Path/Dist_Matrix.txt -o Out_Path -c Your_Covariate_Path/Covariate.txt -i Your_Covariate_Name
 
 #### Demo:
-git clone microbiomeGWAS to your local disk, go to the microbiomeGWAS folder, then run the package with demo dataset:
+- git clone microbiomeGWAS to your local disk, go to the microbiomeGWAS folder, then run the package with demo dataset:
 
-Rscript R/microbiomeGWAS_v1.0.R -r . -p data/microbiome.GWAS.Demo.data -d data/distMat379.txt -c data/dataCovariate379.txt -i smoke
+- Rscript R/microbiomeGWAS_v1.0.R -r . -p data/microbiome.GWAS.Demo.data -d data/distMat379.txt -c data/dataCovariate379.txt -i smoke
 
 packageDir: .
 
