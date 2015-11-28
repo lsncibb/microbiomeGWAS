@@ -12,10 +12,28 @@ PLINK binary genotype files, a distance matrix and a set of covariates, e.g., PC
 The current version does not support dosage data from imputation programs.
 
 #### Usage:
-Rscript microbiomeGWAS_Root_Path/R/microbiomeGWAS_v1.0.R -r microbiomeGWAS_Root_Path -p Your_Plink_Path/Plink_Pre -d Your_Dist_Matrix_Path/Dist_Matrix.txt -o Out_Path -c Your_Covariate_Path/Covariate.txt -i Your_Covariate_Name
+run Rscript R/microbiomeGWAS_v1.0.R -h, you will get help info:
+
+  The microbiomeGWAS Script
+  
+  Arguments:
+  
+  -r	absolute path to the microbiomeGWAS package root, required
+  
+  -p	plink file pre with absolutte path, required
+  
+  -d	distance matrix file name with absolutte path, required
+  
+  -o	absolute path for output results, optional, defalut is the current directory
+  
+  -c	covariateFile file name with absolutte path, optional
+  
+  -i	interactive	covariate name in covariateFile, optional
+  
+  Rscript microbiomeGWAS_Root_Path/R/microbiomeGWAS_v1.0.R -r microbiomeGWAS_Root_Path -p Your_Plink_Path/Plink_Pre -d Your_Dist_Matrix_Path/Dist_Matrix.txt -o Out_Path -c Your_Covariate_Path/Covariate.txt -i Your_Covariate_Name
 
 #### Demo:
-git clone microbiome to your local disk, go to the microbiome folder, then run the package with demo dataset:
+git clone microbiomeGWAS to your local disk, go to the microbiome folder, then run the package with demo dataset:
 
 Rscript R/microbiomeGWAS_v1.0.R -r . -p data/microbiome.GWAS.Demo.data -d data/distMat379.txt -c data/dataCovariate379.txt -i smoke
 
@@ -29,7 +47,7 @@ covariateFile: data/dataCovariate379.txt
 
 interactiveCovariateName: smoke
 
-outDir: /Users/songl5/Downloads/microbiomeGWAS
+outDir: .
 
 Starting:
 
