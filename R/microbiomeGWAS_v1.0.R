@@ -470,9 +470,9 @@ if("-h" %in% args) {
 	Arguments:
 		-r	absolute path to the microbiomeGWAS package root, required
 		-p	plink file pre with absolutte path, required
-		-d	distance matrix file pre with absolutte path, required
+		-d	distance matrix file name with absolutte path, required
 		-o	absolute path for output results, optional, defalut is the current directory
-		-c	covariateFile file pre with absolutte path, optional
+		-c	covariateFile file name with absolutte path, optional
 		-i	interactive	covariate name in covariateFile, optional, 
 	Usage:
 	Rscript microbiomeGWAS_Root_Path/R/microbiomeGWAS_v1.0.R -r microbiomeGWAS_Root_Path -p Your_Plink_Path/Plink_Pre -d Your_Dist_Matrix_Path/Dist_Matrix.txt -o Out_Path -c Your_Covariate_Path/Covariate.txt -i Your_Covariate_Name \n\n")
