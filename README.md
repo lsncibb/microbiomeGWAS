@@ -11,10 +11,10 @@ The score statistics have positive skewness and kurtosis, which lead to severely
 PLINK binary genotype files, a distance matrix and a set of covariates, e.g., PCAs for adjusting population stratefication. 
 The current version does not support dosage data from imputation programs.
 
-Usage:
+### Usage:
 Rscript microbiomeGWAS_Root_Path/R/microbiomeGWAS_v1.0.R -r microbiomeGWAS_Root_Path -p Your_Plink_Path/Plink_Pre -d Your_Dist_Matrix_Path/Dist_Matrix.txt -o Out_Path -c Your_Covariate_Path/Covariate.txt -i Your_Covariate_Name
 
-Demo:
+### Demo:
 git clone microbiome to your local disk, go to the microbiome folder, then run the package with demo dataset:
 Rscript R/microbiomeGWAS_v1.0.R -r . -p data/microbiome.GWAS.Demo.data -d data/distMat379.txt -c data/dataCovariate379.txt -i smoke
 
