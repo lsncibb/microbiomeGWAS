@@ -65,7 +65,7 @@ All done (total 28.414s)
 
 Writing the output file...Done
 
-The result will be save as "microbiome.GWAS.Demo.data.result.txt" in the current folder (default) or the directory you specified.
+The result will be saved as "microbiome.GWAS.Demo.data.result.txt" in the current folder (default) or the directory you specified.
 
 
 ## Memory requirement and computation speed
