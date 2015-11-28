@@ -14,6 +14,27 @@ The current version does not support dosage data from imputation programs.
 Usage:
 Rscript microbiomeGWAS_Root_Path/R/microbiomeGWAS_v1.0.R -r microbiomeGWAS_Root_Path -p Your_Plink_Path/Plink_Pre -d Your_Dist_Matrix_Path/Dist_Matrix.txt -o Out_Path -c Your_Covariate_Path/Covariate.txt -i Your_Covariate_Name
 
+Demo:
+git clone microbiome to your local disk, go to the microbiome folder, then run the package with demo dataset:
+Rscript R/microbiomeGWAS_v1.0.R -r . -p data/microbiome.GWAS.Demo.data -d data/distMat379.txt -c data/dataCovariate379.txt -i smoke
+
+packageDir: .
+pLinkFile: data/microbiome.GWAS.Demo.data
+distMatFile: data/distMat379.txt
+covariateFile: data/dataCovariate379.txt
+interactiveCovariateName: smoke
+outDir: /Users/songl5/Downloads/microbiomeGWAS
+Starting:
+Step 1: Checking input data...Done (0.038s)
+Step 2: Calculating the residuals of the distance matrix via linear regression...Done (0.203s)
+Step 3: Calculating the expectation of Dij terms in the formula, running 1e+06 permutations...Done (25.434s)
+Step 4: Calculating the score test statistic for all SNPs...Done (2.57s)
+Step 5: Calculating the Z score, along with the skewness, kurtosis and p values...Done (0.110000000000003s)
+All done (total 28.414s)
+Writing the output file...Done
+
+The result will be save as "microbiome.GWAS.Demo.data.result.txt" in the current folder (default) or the directory you specified.
+
 ## Memory requirement and computation speed
 MicrobiomeGWAS processes one SNP at a time and does not load all genotype data into memory; thus, it requires only memory for storing the distance matrix. The computation time is summarized in the figure for analyzing a GWAS with 500,000 SNPs. "Main": main effect test only. "All": main effect test, interaction test and joint effect test. 
 
