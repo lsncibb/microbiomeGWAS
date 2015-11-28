@@ -12,7 +12,7 @@ PLINK binary genotype files, a distance matrix and a set of covariates, e.g., PC
 The current version does not support dosage data from imputation programs.
 
 #### Usage:
-- The current version only works on Lunix, Unix and Mac system, does not support on windows
+- The current version only works on Lunix, Unix and Mac system, does not support Windows
 - run Rscript R/microbiomeGWAS_v1.0.R -h, you will get help info:
 
   The microbiomeGWAS Script
