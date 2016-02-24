@@ -33,7 +33,7 @@ funEG <- function(f){
 		p0 <- (1 - tempLevel)^2
 		p1 <- 2 * tempLevel * (1 - tempLevel)
 		tempIdx <- as.integer(factor(f, levels = tempLevel))
-	}else if(is.matrix(f) & ncol(f) == 2){
+	}else if(is.matrix(f) && ncol(f) == 2){
 		tempPaste <- paste(f[, 1], f[, 2])
 		tempIdx <- which(!duplicated(tempPaste))
 		tempLevel <- tempPaste[tempIdx]
@@ -287,9 +287,10 @@ funMain <- function(pLinkFile, distMat, dataCovariate = NULL, interactiveCovaria
 	nSample <- nrow(dataFam)
 	nSNP <- nrow(dataBim)
 
-	if(nrow(distMat) != nSample)stop("The number of samples must be the same in the distance matrix and the pLink file!")
-	if(!is.null(dataCovariate) & nrow(dataCovariate) != nSample)stop("The number of samples must be the same in the covariate file and the pLink file!")
-
+	if(nrow(distMat) != nSample)
+		stop("The number of samples must be the same in the distance matrix and the pLink file!")
+	if(!is.null(dataCovariate) && nrow(dataCovariate) != nSample)
+		stop("The number of samples must be the same in the covariate file and the pLink file!")
 	})
 	cat(paste0("Done (", tempTime[3], "s)\nStep 2: Calculating the residuals of the distance matrix via linear regression..."))
 
@@ -490,7 +491,7 @@ argsL = as.list(as.character(argsDF[, 2]))
 names(argsL) <- argsDF[, 1]
 
 
-if(is.null(argsL$r) | is.null(argsL$p) | is.null(argsL$d)) {
+if(is.null(argsL$r) || is.null(argsL$p) || is.null(argsL$d)) {
 	stop("microbiomeGWAS package root, plink file pre and distance matrix file are required!")
 }
 
@@ -531,13 +532,20 @@ soFile1 <- paste0(packageDir, "/lib/dExp1.so")
 soFile2 <- paste0(packageDir, "/lib/dExp2.so")
 soFile3 <- paste0(packageDir, "/lib/parsePlink.so")
 soFile4 <- paste0(packageDir, "/lib/parsePlink2.so")
-if((!file.exists(soFile1)) | (!file.exists(soFile2)) | (!file.exists(soFile3)) | (!file.exists(soFile4))){
+if((!file.exists(soFile1)) || (!file.exists(soFile2)) || (!file.exists(soFile3)) || (!file.exists(soFile4))){
 	system(paste0('cd ', packageDir, '; sh compile.src.sh'))
 }
 
-if(is.na(covariateFile))dataCovariate <- NULL else dataCovariate <- read.table(covariateFile, header = TRUE)
-if(any(!unlist(lapply(dataCovariate, is.numeric))))stop("Only numeric covariates allowed!")
-if(is.na(interactiveCovariateName))interactiveCovariateName <- NULL
+
+if(is.na(covariateFile)){
+	dataCovariate <- NULL
+	cat('Warning: No covarite file specified!\n')
+}else{
+	dataCovariate <- read.table(covariateFile, header = TRUE)
+	if(any(!unlist(lapply(dataCovariate, is.numeric)))) stop("Only numeric covariates allowed!")
+	if(is.na(interactiveCovariateName))interactiveCovariateName <- NULL
+}
+
 
 cat("Starting:\n")
 tempTime <- system.time(resultDF <- funMain(pLinkFile, distMat, dataCovariate, interactiveCovariateName, soFile1 = soFile1, soFile2 = soFile2, soFile3 = soFile3, soFile4 = soFile4))
