@@ -173,9 +173,14 @@ void parsePlink2 (const char **plinkBed, int *NumSample, int *NumSNP, double *di
 				// }
 			}
 		}
-		
-		result[iResult + 4] = (result[iResult + 1] + result[iResult + 2] + result[iResult + 2]) / (NSam + NSam - result[iResult + 3] - result[iResult + 3]);
-		// result[iResult + 9] = (result[iResult + 6] + result[iResult + 7] + result[iResult + 7]) / (NSam + NSam - result[iResult + 8] - result[iResult + 8]);
+		if(NSam == result[iResult + 3])
+			result[iResult + 4] = 0;
+		else
+			result[iResult + 4] = (result[iResult + 1] + result[iResult + 2] + result[iResult + 2]) / (NSam + NSam - result[iResult + 3] - result[iResult + 3]);
+		// if(NSam == result[iResult + 8])
+		// 	result[iResult + 9] = 0;
+		// else
+		// 	result[iResult + 9] = (result[iResult + 6] + result[iResult + 7] + result[iResult + 7]) / (NSam + NSam - result[iResult + 8] - result[iResult + 8]);
 		
 		for(i = 0; i < NSam - 1; i++){
 			for(k = i + 1; k < NSam; k++){

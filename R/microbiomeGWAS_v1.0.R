@@ -28,6 +28,7 @@ funED <- function(distMat, nPerm = 1e6, nPermEach = 1e4, soFile1 = "dExp1.so", s
 #funEG
 
 funEG <- function(f){
+	if(any(is.na(f)))stop("No NA is allowed in MAF!")
 	if(is.vector(f)){
 		tempLevel <- unique(f)
 		p0 <- (1 - tempLevel)^2
@@ -292,7 +293,7 @@ funMain <- function(pLinkFile, distMat, dataCovariate = NULL, interactiveCovaria
 	if(!is.null(dataCovariate) && nrow(dataCovariate) != nSample)
 		stop("The number of samples must be the same in the covariate file and the pLink file!")
 	})
-	cat(paste0("Done (", tempTime[3], "s)\nStep 2: Calculating the residuals of the distance matrix via linear regression..."))
+	cat(paste0("Done (", signif(tempTime[3], 3), "s)\nStep 2: Calculating the residuals of the distance matrix via linear regression..."))
 
 	if(is.null(dataCovariate)){
 		distMatRes <- distMat - mean(distMat[lower.tri(distMat)], na.rm = TRUE)
@@ -321,7 +322,7 @@ funMain <- function(pLinkFile, distMat, dataCovariate = NULL, interactiveCovaria
 	eD <- funED(distMat, nPerm = nPerm, nPermEach = nPermEach, soFile1 = soFile1, soFile2 = soFile2)
 
 	})
-	cat(paste0("Done (", tempTime[3], "s)\nStep 4: Calculating the score test statistic for all SNPs..."))
+	cat(paste0("Done (", signif(tempTime[3], 3), "s)\nStep 4: Calculating the score test statistic for all SNPs..."))
 	tempTime <- system.time({
 
 	if(is.null(interactiveCovariateName)){
@@ -350,8 +351,7 @@ funMain <- function(pLinkFile, distMat, dataCovariate = NULL, interactiveCovaria
 	tempDF <- as.data.frame(t(dataBed$result))
 	names(tempDF) <- c("RR", "RV", "VV", "MISSING", "MAF", "RR_I", "RV_I", "VV_I", "MISSING_I", "MAF_I", "SM", "SI")
 	})
-
-	cat(paste0("Done (", tempTime[3], "s)\nStep 5: Calculating the Z score, along with the skewness, kurtosis and p values..."))
+	cat(paste0("Done (", signif(tempTime[3], 3), "s)\nStep 5: Calculating the Z score, along with the skewness, kurtosis and p values..."))
 	tempTime <- system.time({
 
 	N <- nSample - tempDF$MISSING
@@ -447,7 +447,7 @@ funMain <- function(pLinkFile, distMat, dataCovariate = NULL, interactiveCovaria
 	}else resultDF <- data.frame(SNP = dataBim$V2, Chr = dataBim$V1, Pos = dataBim$V4, Allele1 = dataBim$V5, Allele2 = dataBim$V6, MAF = f, Z_M = ZM, Skew_M = skewSM, Kurt_M = kurtSM, p_M_Asymptotic = pM, p_M_Skew = pMS, p_M_skew_kurt = pMK, stringsAsFactors = FALSE, check.names = FALSE)
 
 	})
-	cat(paste0("Done (", tempTime[3], "s)\n"))
+	cat(paste0("Done (", signif(tempTime[3], 3), "s)\n"))
 
 	return(resultDF)
 }
@@ -539,17 +539,18 @@ if((!file.exists(soFile1)) || (!file.exists(soFile2)) || (!file.exists(soFile3))
 
 if(is.na(covariateFile)){
 	dataCovariate <- NULL
+	interactiveCovariateName <- NULL
 	cat('Warning: No covarite file specified!\n')
 }else{
-	dataCovariate <- read.table(covariateFile, header = TRUE)
+	dataCovariate <- read.table(covariateFile, header = TRUE, check.names = FALSE)
 	if(any(!unlist(lapply(dataCovariate, is.numeric)))) stop("Only numeric covariates allowed!")
-	if(is.na(interactiveCovariateName))interactiveCovariateName <- NULL
+	if(is.na(interactiveCovariateName)) interactiveCovariateName <- NULL
 }
 
 
 cat("Starting:\n")
 tempTime <- system.time(resultDF <- funMain(pLinkFile, distMat, dataCovariate, interactiveCovariateName, soFile1 = soFile1, soFile2 = soFile2, soFile3 = soFile3, soFile4 = soFile4))
-cat(paste0("All done (total ", tempTime[3], "s)\nWriting the output file..."))
+cat(paste0("All done (total ", signif(tempTime[3], 3), "s)\nWriting the output file..."))
 setwd(outDir)
 write.table(resultDF, file = paste0(tail(strsplit(pLinkFile, '/', fixed = TRUE)[[1]], 1), ".result.txt"), sep = "\t", quote = FALSE, row.names = FALSE)
 cat("Done\n")
